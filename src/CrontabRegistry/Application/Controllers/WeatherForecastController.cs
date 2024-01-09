@@ -21,7 +21,7 @@ namespace CrontabRegistry.Application.Controllers
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<WeatherForecastModel> Get()
         {
             return _weatherForecastService.GenerateWeatherForecast();
         }

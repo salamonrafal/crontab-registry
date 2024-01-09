@@ -1,22 +1,29 @@
 ﻿using CrontabRegistry.Domain.Models;
+using CrontabRegistry.Domain.Repositories;
 using CrontabRegistry.Domain.Services;
 
 namespace CrontabRegistry.Application.Services
 {
     public class WeatherForecastService : IWeatherForecastService
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private readonly IWeatherForecastRepository _weatherForecastRepository;
 
-        public IEnumerable<WeatherForecast> GenerateWeatherForecast()
+        public WeatherForecastService(
+            IWeatherForecastRepository weatherForecastRepository
+        )
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            _weatherForecastRepository = weatherForecastRepository;
+        }
+
+        public IEnumerable<WeatherForecastModel> GenerateWeatherForecast()
+        {
+            var summaries = _weatherForecastRepository.GetSummaries();
+
+            return Enumerable.Range(1, 5).Select(index => new WeatherForecastModel
             {
                 Date = DateTime.Now.AddDays(index),
                 TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+                Summary = summaries[Random.Shared.Next(summaries.Length)]
             }).ToArray();
         }
     }

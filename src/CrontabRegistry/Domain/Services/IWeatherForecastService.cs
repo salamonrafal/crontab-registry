@@ -5,6 +5,6 @@ namespace CrontabRegistry.Domain.Services
 {
     public interface IWeatherForecastService
     {
-        public IEnumerable<WeatherForecast> GenerateWeatherForecast();
+        public IEnumerable<WeatherForecastModel> GenerateWeatherForecast();
     }
 }
