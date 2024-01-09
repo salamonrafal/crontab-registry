@@ -7,3 +7,5 @@ src/CrontabRegistry/Infrastructure/bin
 src/CrontabRegistry/Infrastructure/obj
 tests/Unit/obj
 tests/Unit/bin
+tests/Integration/obj
+tests/Integration/bin

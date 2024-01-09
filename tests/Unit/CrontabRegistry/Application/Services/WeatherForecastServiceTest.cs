@@ -18,6 +18,12 @@ namespace Unit.CrontabRegistry.Application.Services
             _sut = new WeatherForecastService(_mockWeatherForecastRepository.Object);
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            _mockWeatherForecastRepository.VerifyAll();
+        }
+
         [Test]
         public void GenerateWeatherForecast_should_return_random_data()
         {
