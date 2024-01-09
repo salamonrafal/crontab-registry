@@ -5,3 +5,5 @@ src/CrontabRegistry/Domain/bin
 src/CrontabRegistry/Domain/obj
 src/CrontabRegistry/Infrastructure/bin
 src/CrontabRegistry/Infrastructure/obj
+tests/Unit/obj
+tests/Unit/bin
