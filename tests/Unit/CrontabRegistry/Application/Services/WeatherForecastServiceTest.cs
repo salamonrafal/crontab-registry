@@ -25,7 +25,7 @@ namespace Unit.CrontabRegistry.Application.Services
         }
 
         [Test]
-        public void GenerateWeatherForecast_should_return_random_data()
+        public async Task GenerateWeatherForecast_should_return_random_data()
         {
             // arrange
             var expectedSummaries = new[]
@@ -43,10 +43,10 @@ namespace Unit.CrontabRegistry.Application.Services
             };
 
             _mockWeatherForecastRepository.Setup(m => m.GetSummaries())
-                .Returns(expectedSummaries);
+                .ReturnsAsync(expectedSummaries);
 
             // act
-            var results = _sut.GenerateWeatherForecast();
+            var results = await _sut.GenerateWeatherForecast();
 
             // assert
             results.Should().HaveCount(5);

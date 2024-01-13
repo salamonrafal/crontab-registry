@@ -1,24 +1,39 @@
-﻿using CrontabRegistry.Domain.Repositories;
+﻿using CrontabRegistry.Domain.Models;
+using CrontabRegistry.Domain.Options;
+using CrontabRegistry.Domain.Repositories;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CrontabRegistry.Infrastructure.Repositories
 {
-    public class WeatherForecastRepository : IWeatherForecastRepository
+    public class WeatherForecastRepository : MongoAbstractRepository, IWeatherForecastRepository
     {
-        public string[] GetSummaries()
+        public WeatherForecastRepository(
+            IMongoClient mongoClient,
+            IOptions<CrontabRegistryDatabaseOptions> options
+        ) : base(mongoClient, options)
         {
-            return new[]
+        }
+
+        public async Task<string[]> GetSummaries()
+        {
+            var data = await GetSummariesData();
+            var summariesList = new List<string>();
+
+            foreach (var item in data)
             {
-                "Freezing",
-                "Bracing",
-                "Chilly",
-                "Cool",
-                "Mild",
-                "Warm",
-                "Balmy",
-                "Hot",
-                "Sweltering",
-                "Scorching"
-            };
+                summariesList.Add(item.Name ?? "");
+            }
+
+            return summariesList.ToArray();
+        }
+
+        private async Task<IList<SummarieModel>> GetSummariesData()
+        {
+            var summariesCollection = _contextDb.GetCollection<SummarieModel>("summaries");
+            return await summariesCollection.Find(_ => true).ToListAsync();
         }
     }
 }

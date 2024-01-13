@@ -1,10 +1,11 @@
 ﻿using CrontabRegistry.Domain.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CrontabRegistry.Domain.Services
 {
     public interface IWeatherForecastService
     {
-        public IEnumerable<WeatherForecastModel> GenerateWeatherForecast();
+        public Task<IEnumerable<WeatherForecastModel>> GenerateWeatherForecast();
     }
 }

@@ -15,9 +15,9 @@ namespace CrontabRegistry.Application.Services
             _weatherForecastRepository = weatherForecastRepository;
         }
 
-        public IEnumerable<WeatherForecastModel> GenerateWeatherForecast()
+        public async Task<IEnumerable<WeatherForecastModel>> GenerateWeatherForecast()
         {
-            var summaries = _weatherForecastRepository.GetSummaries();
+            var summaries = await _weatherForecastRepository.GetSummaries();
 
             return Enumerable.Range(1, 5).Select(index => new WeatherForecastModel
             {

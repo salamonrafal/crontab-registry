@@ -1,7 +1,9 @@
-﻿namespace CrontabRegistry.Domain.Repositories
+﻿using System.Threading.Tasks;
+
+namespace CrontabRegistry.Domain.Repositories
 {
     public interface IWeatherForecastRepository
     {
-        public string[] GetSummaries();
+        public Task<string[]> GetSummaries();
     }
 }
