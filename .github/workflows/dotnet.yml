@@ -27,6 +27,6 @@ jobs:
     - name: Set secrets
       env:
         MONGODB_CONNECTION_STRING: ${{ secrets.CRONTABREGISTRYDATABASEOPTIONS_CONNECTIONSTRING }}
-      run: dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "$MONGODB_CONNECTION_STRING"
+      run: dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "$MONGODB_CONNECTION_STRING" --project ./src/CrontabRegistry/Application/Application.csproj
     - name: Test
       run: dotnet test --no-build --verbosity normal
