@@ -1,0 +1,18 @@
+# ##################################################### #
+# This is Dockerfile use for development                 #
+# ##################################################### #
+FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
+ENV ASPNETCORE_URLS=http://+:4500
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true
+ENV CRONTAB_REGISTRY_MONGODB_CS_SECRETS=${CRONTAB_REGISTRY_MONGODB_CS_SECRETS}
+ENV ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+
+WORKDIR /application
+COPY . .
+
+RUN dotnet restore ./src/CrontabRegistry/Application/Application.csproj; \
+	dotnet publish ./src/CrontabRegistry/Application/Application.csproj -o ./publish; \
+	dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "${CRONTAB_REGISTRY_MONGODB_CS_SECRETS}" --project ./src/CrontabRegistry/Application/Application.csproj;
+
+EXPOSE 4500
+ENTRYPOINT dotnet run --no-launch-profile --project "/application/src/CrontabRegistry/Application/"
