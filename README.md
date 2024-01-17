@@ -85,9 +85,5 @@ docker container stop crontab-registry && docker container rm crontab-registry; 
     && docker image build -f ./docker/Dockerfile.development -t crontab-registry:beta-1 . \
     && docker container create -it -p 18181:4500 --env-file=./.env -l com.salamonrafal.repository="crontab-registry" --name "crontab-registry" --restart always crontab-registry:beta-1 \
     && docker container start crontab-registry \
-    && docker exec -it crontab-registry \
-      dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "${CRONTAB_REGISTRY_MONGODB_CS_SECRETS}" \
-        --project ./src/CrontabRegistry/Application/Application.csproj; echo "SECRETS: ${CRONTAB_REGISTRY_MONGODB_CS_SECRETS}" && docker container restart crontab-registry \
-    && docker container restart crontab-registry \
   );
 ```
