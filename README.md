@@ -1,17 +1,39 @@
 # crontab-registry
 
+# Index of content
+* [Docker](#docker)
+  * [Build image](#build-image)
+    * [Build image for Production](#build-image-for-production)
+    * [Build image for Development](#build-image-for-development)
+  * [Container create](#container-create)
+    * [Container create for Production](#container-create-for-production)
+    * [Container create for Development](#container-create-for-development)
+  * [Container start](#container-start)
+  * [Container restart](#container-restart)
+  * [Container destroy](#container-destroy)
+  * [Container Stop & Destroy](#container-stop--destroy)
+  * [Container run bash](#container-run-bash)
+  * [Logs for container](#logs-for-container)
+  * [Set secret on container](#set-secret-on-container)
+  * [Full commands](#full-commands)
+    * [Rebuild for development env](#rebuild-for-development-env)
+
+
+---
+
+
 # Docker 
 
 
 ## Build image
 
 
-### Default
+### Build image for Production
 ```shell
 docker image build -f ./docker/Dockerfile -t crontab-registry:beta-1 .
 ```
 
-### For development
+### Build image for Development
 ```shell
 docker image build -f ./docker/Dockerfile.development -t crontab-registry:beta-1 .
 ```
@@ -19,12 +41,12 @@ docker image build -f ./docker/Dockerfile.development -t crontab-registry:beta-1
 
 ## Container create
 
-### For Production
+### Container create for Production
 ```shell
 docker container create -it -p 18181:4500 -l com.salamonrafal.repository="crontab-registry" --name "crontab-registry" --restart always crontab-registry:beta-1
 ```
 
-### For Development
+### Container create for Development
 ```shell
 docker container create -it -p 18181:4500 --env-file=./.env -l com.salamonrafal.repository="crontab-registry" --name "crontab-registry" --restart always crontab-registry:beta-1
 ```
@@ -53,7 +75,7 @@ docker container stop crontab-registry
 docker container rm crontab-registry
 ```
 
-### Stop & Destroy
+### Container Stop & Destroy
 ```shell
 docker container stop crontab-registry && docker container rm crontab-registry
 ```
@@ -64,21 +86,21 @@ docker container stop crontab-registry && docker container rm crontab-registry
 docker exec -it crontab-registry bash
 ```
 
-## Get docker container logs:
+## Logs for container:
 ```shell
 docker logs crontab-registry
 ```
 
-## Setup Secrets for container
+## Set secret on container
 ```shell
-(source '.env' && docker exec -it crontab-registry \
+( source '.env' && docker exec -it crontab-registry \
   dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "${CRONTAB_REGISTRY_MONGODB_CS_SECRETS}" \
-  --project ./src/CrontabRegistry/Application/Application.csproj; echo "SECRETS: ${CRONTAB_REGISTRY_MONGODB_CS_SECRETS}" && docker container restart crontab-registry);
+  --project ./src/CrontabRegistry/Application/Application.csproj && docker container restart crontab-registry );
 ```
 
 ## Full commands
 
-### Rebuld for Development env
+### Rebuild for development env
 ```shell
 docker container stop crontab-registry && docker container rm crontab-registry; \
   (source '.env' \
