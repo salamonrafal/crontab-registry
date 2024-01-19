@@ -1,9 +1,9 @@
 var builder = WebApplication.CreateBuilder(args);
-var configuration = builder.Configuration;
+builder.Configuration.AddEnvironmentVariables(prefix: "DOTENT_APP_");
 
 // Add services to the container.
 builder.Services.AddServices();
-builder.Services.AddRepositories(configuration);
+builder.Services.AddRepositories(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

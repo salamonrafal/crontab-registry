@@ -1,20 +1,41 @@
 # ##################################################### #
 # This is Dockerfile use for production                 #
 # ##################################################### #
-FROM mcr.microsoft.com/dotnet/sdk:6.0 as build
-WORKDIR /application
-COPY . .
+ARG dotnet_version=6.0
+ARG project_file_cfproj="./src/CrontabRegistry/Application/Application.csproj"
+ARG project_entrypoint_dll="/application/Application.dll"
+ARG app_dotnet_environment_name="Production"
 
-RUN dotnet restore ./src/CrontabRegistry/Application/Application.csproj; \
-	dotnet publish ./src/CrontabRegistry/Application/Application.csproj -o ./publish;
+FROM mcr.microsoft.com/dotnet/sdk:$dotnet_version as build
+	ARG project_file_cfproj
+	ARG project_start_directory
+	ARG app_dotnet_environment_name
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine as runtime
-ENV ASPNETCORE_URLS=http://+:4500
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true
+	ENV ASPNETCORE_URLS=http://+:4500
+	ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true
+	ENV ASPNETCORE_ENVIRONMENT=${app_dotnet_environment_name}
+	ENV MYSERVICE_PROJECT_FILE_CSPROJ="${project_file_cfproj}"
 
-WORKDIR /application
+	WORKDIR /application
+	COPY . .
 
-COPY --from=build /application/publish /application
+	RUN dotnet restore ${MYSERVICE_PROJECT_FILE_CSPROJ}; \
+		dotnet build ${MYSERVICE_PROJECT_FILE_CSPROJ}; \
+		dotnet publish ${MYSERVICE_PROJECT_FILE_CSPROJ} -o ./publish;
 
-EXPOSE 4500
-ENTRYPOINT [ "dotnet", "/application/Application.dll" ]
+
+FROM mcr.microsoft.com/dotnet/aspnet:$dotnet_version as runtime
+	ARG project_entrypoint_dll
+	ARG app_dotnet_environment_name
+
+	ENV ASPNETCORE_URLS=http://+:4500
+	ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=true
+	ENV ASPNETCORE_ENVIRONMENT=${app_dotnet_environment_name}
+	ENV MYSERVICE_PROJECT_ENTRYPOINT_DLL=${project_entrypoint_dll}
+
+	WORKDIR /application
+
+	COPY --from=build /application/publish /application
+
+	EXPOSE 4500
+	ENTRYPOINT echo $MYSERVICE_PROJECT_ENTRYPOINT_DLL; dotnet $MYSERVICE_PROJECT_ENTRYPOINT_DLL;

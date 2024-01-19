@@ -13,7 +13,7 @@ else
 	print_messange_log "error" "Publish project ${MYSERVICE_PROJECT_FILE_CSPROJ}"
 fi
 
-if dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "${CRONTAB_REGISTRY_MONGODB_CS_SECRETS}" \
+if dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "${DOTENT_APP_CrontabRegistryDatabaseOptions__ConnectionString}" \
 	--project ${MYSERVICE_PROJECT_FILE_CSPROJ} > /dev/null; then
 	print_messange_log "ok" "Set secrets for CrontabRegistryDatabaseOptions:ConnectionString"
 else
