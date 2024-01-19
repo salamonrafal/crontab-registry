@@ -17,7 +17,8 @@
   * [Set secret on container](#set-secret-on-container)
   * [Full commands](#full-commands)
     * [Rebuild for development env](#rebuild-for-development-env)
-
+  * [Environments variables](#environments-variables)
+  * [Secrets in project](#secrets-in-project)
 
 ---
 
@@ -30,12 +31,13 @@ Utilize a Dockerfile to define application configurations and dependencies, crea
 
 ### Build image for Production
 ```shell
-docker image build -f ./docker/Dockerfile -t crontab-registry:beta-1 .
+(source '.env' && docker image build -f ./docker/Dockerfile -t crontab-registry:production  .);
 ```
+
 
 ### Build image for Development
 ```shell
-docker image build -f ./docker/Dockerfile.development -t crontab-registry:beta-1 .
+docker image build -f ./docker/Dockerfile.development -t crontab-registry:development .
 ```
 
 
@@ -44,12 +46,12 @@ This section details the usage of the docker container create command with speci
 
 ### Container create for Production
 ```shell
-docker container create -it -p 18181:4500 -l com.salamonrafal.repository="crontab-registry" --name "crontab-registry" --restart always crontab-registry:beta-1
+docker container create -it -p 18181:4500 --env-file=./.env -l com.salamonrafal.repository="crontab-registry" -l com.salamonrafal.environment="production" --name "crontab-registry" --restart always crontab-registry:production
 ```
 
 ### Container create for Development
 ```shell
-docker container create -it -p 18181:4500 --env-file=./.env -l com.salamonrafal.repository="crontab-registry" --name "crontab-registry" --restart always crontab-registry:beta-1
+docker container create -it -p 18181:4500 --env-file=./.env -l com.salamonrafal.repository="crontab-registry" -l com.salamonrafal.environment="development" --name "crontab-registry" --restart always crontab-registry:development
 ```
 
 
@@ -124,10 +126,23 @@ This section details a command sequence designed to stop and remove the "crontab
 ```shell
 docker container stop crontab-registry && docker container rm crontab-registry; \
   (source '.env' \
-    && docker image build -f ./docker/Dockerfile.development -t crontab-registry:beta-1 . \
-    && docker container create -it -p 18181:4500 --env-file=./.env -l com.salamonrafal.repository="crontab-registry" --name "crontab-registry" --restart always crontab-registry:beta-1 \
+    && docker image build -f ./docker/Dockerfile.development -t crontab-registry:development . \
+    && docker container create -it -p 18181:4500 --env-file=./.env -l com.salamonrafal.repository="crontab-registry" -l com.salamonrafal.environment="development" --name "crontab-registry" --restart always crontab-registry:development \
     && docker container start crontab-registry \
   );
 ```
 
 This sequence provides a comprehensive approach to update, rebuild, and restart the "crontab-registry" container with the latest configurations.
+
+
+# Environments variables
+* DOTENT_APP_CrontabRegistryDatabaseOptions__ConnectionString - You can pass to your application connection string to MongoDb
+* ASPNETCORE_ENVIRONMENT - You can set for which environment you deploy code. Options: Development, Production
+
+
+# Secrets in project 
+Never commit variables such as passwords or other sensitive data to the repository. 
+You can handle such data in several ways:
+* Through environment variables (used in this project for deploying the application to a server), and you can read more about them [here](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-8.0#non-prefixed-environment-variables)
+* Using user-secrets in dotnet, which is very useful during the development and testing phases. More information can be found [here](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=linux)
+* By utilizing an application like Vault or a similar tool (the best solution where sensitive data is not stored directly without encryption). You can learn more [here](https://developer.hashicorp.com/vault/docs/what-is-vault)
