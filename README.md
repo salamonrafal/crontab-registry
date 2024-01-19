@@ -31,13 +31,13 @@ Utilize a Dockerfile to define application configurations and dependencies, crea
 
 ### Build image for Production
 ```shell
-(source '.env' && docker image build -f ./docker/Dockerfile -t crontab-registry:production  . );
+docker image build -f ./docker/Dockerfile -t crontab-registry:production .;
 ```
 
 
 ### Build image for Development
 ```shell
-docker image build -f ./docker/Dockerfile.development -t crontab-registry:development .
+docker image build -f ./docker/Dockerfile.development -t crontab-registry:development .;
 ```
 
 
