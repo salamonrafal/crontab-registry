@@ -11,3 +11,4 @@ tests/Integration/obj
 tests/Integration/bin
 .env
 .env.production
+./docker-artifact

@@ -16,7 +16,7 @@ jobs:
         - name: Save image to file
           run: |
             mkdir ./docker-artifact
-            docker image save crontab-registry:production > docker-artifact_production.tar
+            docker image save crontab-registry:production > ./docker-artifact/docker-artifact_production.tar
         - uses: actions/upload-artifact@v4
           name: Upload Artifact
           with:
