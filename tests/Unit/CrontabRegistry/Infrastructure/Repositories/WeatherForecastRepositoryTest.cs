@@ -12,7 +12,7 @@ namespace Unit.CrontabRegistry.Infrastructure.Repositories
 {
     public class WeatherForecastRepositoryTest
     {
-        private IWeatherForecastRepository _sut; 
+        private IWeatherForecastRepository? _sut; 
         private Mock<IMongoClient> _mockMongoClient;
         private Mock<IMongoDatabase> _mockMongoDatabase;
         private Mock<IMongoCollection<SummarieModel>> _mockMongoCollection;

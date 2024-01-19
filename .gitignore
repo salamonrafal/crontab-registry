@@ -9,3 +9,6 @@ tests/Unit/obj
 tests/Unit/bin
 tests/Integration/obj
 tests/Integration/bin
+.env
+.env.production
+./docker-artifact
