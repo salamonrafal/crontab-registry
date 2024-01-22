@@ -9,7 +9,7 @@ node {
         stage('Prepare and Checkout') {
             def dotnet = docker.image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
             dotnet.pull()
-            maven.inside {
+            dotnet.inside {
                 sh 'ls -lh'
             }
         }
