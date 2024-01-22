@@ -9,7 +9,7 @@ node {
         stage('[.NET] Run test') {
             def dotnet = docker.image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
             dotnet.pull()
-            dotnet.inside {
+            dotnet..withRun('-u Administrator') {
                 sh 'ls -lh'
                 sh '''
                     export DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME"
