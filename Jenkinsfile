@@ -60,6 +60,7 @@ node {
     } catch (Exception e) {
 
         if (fileExists(pathToTestResults)) {
+            sh 'ls -lh'
             junit "$pathToTestResults"
         } else {
             echo "File report does not exist"
