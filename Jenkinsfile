@@ -9,13 +9,13 @@ node {
         stage('[.NET] Run test') {
             def dotnet = docker.image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
             dotnet.pull()
-            dotnet.inside {
-                sh '''
-                    sudo dotnet restore; \
-                    sudo dotnet build --no-restore; \
-                    sudo dotnet test --no-build --verbosity normal;
-                '''
+            dotnet.withRun('-u root') {
                 sh 'ls -lh'
+                sh '''
+                    dotnet restore; \
+                    dotnet build --no-restore; \
+                    dotnet test --no-build --verbosity normal;
+                '''
             }
         }
     } catch (Exception e) {
