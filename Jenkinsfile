@@ -1,6 +1,6 @@
 node {
     def dotnetVersion = "6.0"
-    def pathToTestResults = "./.test-results/TestResults.xml"
+    def pathToTestResults = ".test-results/TestResults.xml"
 
     try {
         stage('[GIT] Run Checkout') {
