@@ -49,7 +49,7 @@ node {
                         echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"
                         echo "HOME: \$HOME"
 
-                        dotnet test --no-build --verbosity normal
+                        dotnet test --no-build --verbosity normal --logger 'junit' --results-directory './.test-results/unit';
                     '''
                 }
             }
@@ -60,7 +60,7 @@ node {
         currentBuild.result = 'FAILED'
     } finally {
         stage('Clean workspace') {
-            cleanWs()
+           // cleanWs()
         }
     }
 }
