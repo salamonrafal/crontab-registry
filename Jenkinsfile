@@ -1,6 +1,6 @@
 node {
     try {
-        String dotnetVersion = "6.0"
+        def dotnetVersion = "6.0"
         
         stage('Prepare and Checkout') {
             checkout scm
