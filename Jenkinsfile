@@ -3,6 +3,16 @@ node {
     def pathToTestResultsUnit = ".test-results/unit/TestResults.xml"
     def pathToTestResultsIntegration = ".test-results/integration/TestResults.xml"
 
+    def secrets = [
+        [
+            path: 'service-crontab-registry/development',
+            engineVersion: 2,
+            secretValues: [
+                [envVar: 'V_MONGODB_CONNECTION_STRING', vaultKey: 'MONGODB_CONNECTION_STRING']
+            ]
+        ]
+    ]
+
     try {
         stage('[GIT] Run Checkout') {
             checkout scm
@@ -29,6 +39,17 @@ node {
 
                         dotnet restore;
                     '''
+                }
+
+                stage('[.NET][Testing] Set secrets') {
+                    withVault([vaultSecrets: secrets]) {
+                        sh '''
+                            export DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME
+                            export HOME=/tmp
+
+                            dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "${env.V_MONGODB_CONNECTION_STRING}" --project ./src/CrontabRegistry/Application/Application.csproj;
+                        '''
+                    }
                 }
 
                 stage('[.NET][Testing] Build application') {
