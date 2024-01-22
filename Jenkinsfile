@@ -7,8 +7,11 @@ node {
         }
 
         stage('Prepare and Checkout') {
-            docker
-                .image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
+            def dotnet = docker.image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
+            dotnet.pull()
+            maven.inside {
+                sh 'ls -lh'
+            }
         }
     } catch (Exception e) {
         println('Caught exception: ' + e)
