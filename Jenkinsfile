@@ -8,7 +8,11 @@ node {
 
         stage('[.NET][Testing] Run test') {
             def dotnet = docker.image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
-            dotnet.pull()
+
+            stage('[.NET][Testing] Pull image dotnet/sdk:$dotnetVersion') {
+                dotnet.pull()
+            }
+
             dotnet.inside {
                 sh 'ls -lh'
 
