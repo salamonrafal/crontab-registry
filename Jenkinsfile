@@ -42,7 +42,7 @@ node {
                     '''
                 }
 
-                stage('[.NET][Testing] Run test') {
+                stage('[.NET][Testing] Run test Unit') {
                     try {
                         sh '''
                             export DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME
@@ -51,7 +51,7 @@ node {
                             echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"
                             echo "HOME: \$HOME"
 
-                            dotnet test --no-build --verbosity normal --logger 'junit;LogFilePrefix=testResults' --results-directory './.test-results/';
+                            dotnet test --no-build --verbosity normal --logger 'junit;LogFilePrefix=units_' --results-directory './.test-results/ ./tests/Unit/Unit.csproj';
                         '''
 
                         junit "$pathToTestResults"
