@@ -70,7 +70,6 @@ node {
                     }
                 }
 
-
                 stage('[.NET][Testing] Run test Integration') {
                     try {
                         sh '''
@@ -105,7 +104,7 @@ node {
         currentBuild.result = 'FAILED'
     } finally {
         stage('Clean workspace') {
-           // cleanWs()
+           cleanWs()
         }
     }
 }
