@@ -43,29 +43,32 @@ node {
                 }
 
                 stage('[.NET][Testing] Run test') {
-                    sh '''
-                        export DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME
-                        export HOME=/tmp
+                    try {
+                        sh '''
+                            export DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME
+                            export HOME=/tmp
 
-                        echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"
-                        echo "HOME: \$HOME"
+                            echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"
+                            echo "HOME: \$HOME"
 
-                        dotnet test --no-build --verbosity normal --logger 'junit' --results-directory './.test-results/';
-                    '''
+                            dotnet test --no-build --verbosity normal --logger 'junit' --results-directory './.test-results/';
+                        '''
 
-                    junit "$pathToTestResults"
+                        junit "$pathToTestResults"
+                    } catch (Exception e) {
+                        if (fileExists(pathToTestResults)) {
+                            sh 'ls -lh'
+                            junit "$pathToTestResults"
+                        } else {
+                            echo "File report does not exist"
+                        }
+
+                        throw new Exception("${e.message}")
+                    }
                 }
             }
         }
     } catch (Exception e) {
-
-        if (fileExists(pathToTestResults)) {
-            sh 'ls -lh'
-            junit "$pathToTestResults"
-        } else {
-            echo "File report does not exist"
-        }
-
         println('Caught exception: ' + e)
 
         currentBuild.result = 'FAILED'
