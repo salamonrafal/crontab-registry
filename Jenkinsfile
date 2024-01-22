@@ -1,6 +1,7 @@
 node {
     def dotnetVersion = "6.0"
-    def pathToTestResults = ".test-results/TestResults.xml"
+    def pathToTestResultsUnit = ".test-results/TestResultsUnit.xml"
+    def pathToTestResultsIntegration = ".test-results/TestResultsIntegration.xml"
 
     try {
         stage('[GIT] Run Checkout') {
@@ -51,16 +52,44 @@ node {
                             echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"
                             echo "HOME: \$HOME"
 
-                            dotnet test --no-build --verbosity normal --logger 'junit;LogFilePrefix=units_' --results-directory './.test-results/ ./tests/Unit/Unit.csproj';
+                            dotnet test --no-build --verbosity normal --logger 'junit;logfilename=TestResultsUnit.xml' --results-directory './.test-results/' ./tests/Unit/Unit.csproj;
                         '''
 
-                        junit "$pathToTestResults"
+                        junit "$pathToTestResultsUnit"
                     } catch (Exception e) {
-                        if (fileExists(pathToTestResults)) {
+                        if (fileExists(pathToTestResultsUnit)) {
                             sh 'ls -lh'
-                            println("file founded: $pathToTestResults");
+                            println("file founded: $pathToTestResultsUnit");
 
-                            junit "$pathToTestResults"
+                            junit "$pathToTestResultsUnit"
+                        } else {
+                            echo "File report does not exist"
+                        }
+
+                        throw new Exception("${e.message}")
+                    }
+                }
+
+
+                stage('[.NET][Testing] Run test Integration') {
+                    try {
+                        sh '''
+                            export DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME
+                            export HOME=/tmp
+
+                            echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"
+                            echo "HOME: \$HOME"
+
+                            dotnet test --no-build --verbosity normal --logger 'junit;logfilename=TestResultsIntegration.xml' --results-directory './.test-results/' ./tests/Integration/Integration.csproj;
+                        '''
+
+                        junit "$pathToTestResultsIntegration"
+                    } catch (Exception e) {
+                        if (fileExists(pathToTestResultsIntegration)) {
+                            sh 'ls -lh'
+                            println("file founded: $pathToTestResultsIntegration");
+
+                            junit "$pathToTestResultsIntegration"
                         } else {
                             echo "File report does not exist"
                         }
