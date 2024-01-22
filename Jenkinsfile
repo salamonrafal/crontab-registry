@@ -6,18 +6,23 @@ node {
             checkout scm
         }
 
-        stage('[.NET] Run test') {
+        stage('[.NET][Testing] Run test') {
             def dotnet = docker.image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
             dotnet.pull()
-            dotnet.inside {
+            dotnet.withRun('-e DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME -e HOME=/tmp') {
                 sh 'ls -lh'
-                sh '''
-                    export DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME"
-                    export HOME="/tmp"
-                    dotnet restore; \
-                    dotnet build --no-restore; \
-                    dotnet test --no-build --verbosity normal;
-                '''
+
+                stage('[.NET][Testing] Restore projects') {
+                    sh 'dotnet restore;'
+                }
+
+                stage('[.NET][Testing] Build application') {
+                    sh 'dotnet build --no-restore;'
+                }
+
+                stage('[.NET][Testing] Run test') {
+                    sh 'dotnet test --no-build --verbosity normal;'
+                }
             }
         }
     } catch (Exception e) {
