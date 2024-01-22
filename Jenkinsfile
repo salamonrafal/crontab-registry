@@ -47,7 +47,7 @@ node {
                             export DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME
                             export HOME=/tmp
 
-                            dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "${env.V_MONGODB_CONNECTION_STRING}" --project ./src/CrontabRegistry/Application/Application.csproj;
+                            dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "$env.V_MONGODB_CONNECTION_STRING" --project ./src/CrontabRegistry/Application/Application.csproj;
                         '''
                     }
                 }
