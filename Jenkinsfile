@@ -9,7 +9,7 @@ node {
         stage('[.NET] Run test') {
             def dotnet = docker.image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
             dotnet.pull()
-            dotnet.withRun('-u root') {
+            dotnet.inside {
                 sh 'ls -lh'
                 sh '''
                     dotnet restore; \
