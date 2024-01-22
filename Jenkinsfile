@@ -51,7 +51,7 @@ node {
                             echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"
                             echo "HOME: \$HOME"
 
-                            dotnet test --no-build --verbosity normal --logger 'junit' --results-directory './.test-results/';
+                            dotnet test --no-build --verbosity normal --logger 'junit;LogFilePrefix=testResults' --results-directory './.test-results/';
                         '''
 
                         junit "$pathToTestResults"
