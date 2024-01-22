@@ -11,9 +11,9 @@ node {
             dotnet.pull()
             dotnet.inside {
                 sh '''
-                    dotnet restore; \
-                    dotnet build --no-restore; \
-                    dotnet test --no-build --verbosity normal;
+                    sudo dotnet restore; \
+                    sudo dotnet build --no-restore; \
+                    sudo dotnet test --no-build --verbosity normal;
                 '''
                 sh 'ls -lh'
             }
