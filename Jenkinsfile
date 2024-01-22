@@ -12,6 +12,7 @@ node {
             dotnet.inside {
                 sh 'ls -lh'
                 sh '''
+                    export DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME"
                     dotnet restore; \
                     dotnet build --no-restore; \
                     dotnet test --no-build --verbosity normal;
