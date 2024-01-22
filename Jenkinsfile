@@ -13,16 +13,23 @@ node {
                 sh 'ls -lh'
                 sh 'export DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME'
                 sh 'export HOME=/tmp'
-
+                sh 'echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"'
+                sh 'echo "HOME: \$HOME"'
                 stage('[.NET][Testing] Restore projects') {
+                    sh 'echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"'
+                    sh 'echo "HOME: \$HOME"'
                     sh 'dotnet restore;'
                 }
 
                 stage('[.NET][Testing] Build application') {
+                    sh 'echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"'
+                    sh 'echo "HOME: \$HOME"'
                     sh 'dotnet build --no-restore;'
                 }
 
                 stage('[.NET][Testing] Run test') {
+                    sh 'echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"'
+                    sh 'echo "HOME: \$HOME"'
                     sh 'dotnet test --no-build --verbosity normal;'
                 }
             }
