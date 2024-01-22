@@ -1,7 +1,8 @@
 node {
+    def dotnetVersion = "6.0"
+    def pathToTestResults = "./.test-results/TestResults.xml"
+
     try {
-        def dotnetVersion = "6.0"
-        
         stage('[GIT] Run Checkout') {
             checkout scm
         }
@@ -52,11 +53,18 @@ node {
                         dotnet test --no-build --verbosity normal --logger 'junit' --results-directory './.test-results/';
                     '''
 
-                    junit "./.test-results/TestResults.xml"
+                    junit "$pathToTestResults"
                 }
             }
         }
     } catch (Exception e) {
+
+        if (fileExists(junitTestResultPath)) {
+            junit "$pathToTestResults"
+        } else {
+            echo "File report does not exist"
+        }
+
         println('Caught exception: ' + e)
 
         currentBuild.result = 'FAILED'
