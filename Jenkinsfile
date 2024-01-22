@@ -9,7 +9,7 @@ node {
         stage('[.NET][Testing] Run test') {
             def dotnet = docker.image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
 
-            stage('[.NET][Testing] Pull image dotnet/sdk:$dotnetVersion') {
+            stage('[.NET][Testing] Pull image dotnet/sdk:' + $dotnetVersion) {
                 dotnet.pull()
             }
 
