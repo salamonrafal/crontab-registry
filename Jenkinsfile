@@ -9,8 +9,10 @@ node {
         stage('[.NET][Testing] Run test') {
             def dotnet = docker.image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
             dotnet.pull()
-            dotnet.withRun('--env DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME --env HOME=/tmp') {
+            dotnet.inside {
                 sh 'ls -lh'
+                sh 'export DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME'
+                sh 'export HOME=/tmp'
 
                 stage('[.NET][Testing] Restore projects') {
                     sh 'dotnet restore;'
