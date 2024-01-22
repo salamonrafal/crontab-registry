@@ -10,9 +10,11 @@ node {
             def dotnet = docker.image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
             dotnet.pull()
             dotnet.inside {
-                dotnet restore
-                dotnet build --no-restore
-                dotnet test --no-build --verbosity normal
+                sh '''
+                    dotnet restore; \
+                    dotnet build --no-restore; \
+                    dotnet test --no-build --verbosity normal;
+                '''
                 sh 'ls -lh'
             }
         }
