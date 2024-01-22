@@ -59,7 +59,7 @@ node {
         }
     } catch (Exception e) {
 
-        if (fileExists(junitTestResultPath)) {
+        if (fileExists(pathToTestResults)) {
             junit "$pathToTestResults"
         } else {
             echo "File report does not exist"
