@@ -2,14 +2,17 @@ node {
     try {
         def dotnetVersion = "6.0"
         
-        stage('Prepare and Checkout') {
+        stage('[GIT] Run Checkout') {
             checkout scm
         }
 
-        stage('Prepare and Checkout') {
+        stage('[.NET] Run test') {
             def dotnet = docker.image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
             dotnet.pull()
             dotnet.inside {
+                dotnet restore
+                dotnet build --no-restore
+                dotnet test --no-build --verbosity normal
                 sh 'ls -lh'
             }
         }
