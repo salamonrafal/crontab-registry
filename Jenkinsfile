@@ -58,6 +58,8 @@ node {
                     } catch (Exception e) {
                         if (fileExists(pathToTestResults)) {
                             sh 'ls -lh'
+                            println("file founded: $pathToTestResults");
+
                             junit "$pathToTestResults"
                         } else {
                             echo "File report does not exist"
