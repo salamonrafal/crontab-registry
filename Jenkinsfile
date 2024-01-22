@@ -9,10 +9,6 @@ node {
         stage('Prepare and Checkout') {
             docker
                 .image("mcr.microsoft.com/dotnet/sdk:$dotnetVersion")
-                .withRun()
-                .inside() {
-                    
-                }
         }
     } catch (Exception e) {
         println('Caught exception: ' + e)
