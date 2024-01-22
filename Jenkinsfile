@@ -1,7 +1,7 @@
 node {
     def dotnetVersion = "6.0"
-    def pathToTestResultsUnit = ".test-results/TestResultsUnit.xml"
-    def pathToTestResultsIntegration = ".test-results/TestResultsIntegration.xml"
+    def pathToTestResultsUnit = ".test-results/unit/TestResults.xml"
+    def pathToTestResultsIntegration = ".test-results/integration/TestResults.xml"
 
     try {
         stage('[GIT] Run Checkout') {
@@ -52,7 +52,7 @@ node {
                             echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"
                             echo "HOME: \$HOME"
 
-                            dotnet test --no-build --verbosity normal --logger 'junit;logfilename=TestResultsUnit.xml' --results-directory './.test-results/' ./tests/Unit/Unit.csproj;
+                            dotnet test --no-build --verbosity normal --logger 'junit' --results-directory './.test-results/unit' ./tests/Unit/Unit.csproj;
                         '''
 
                         junit "$pathToTestResultsUnit"
@@ -80,7 +80,7 @@ node {
                             echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"
                             echo "HOME: \$HOME"
 
-                            dotnet test --no-build --verbosity normal --logger 'junit;logfilename=TestResultsIntegration.xml' --results-directory './.test-results/' ./tests/Integration/Integration.csproj;
+                            dotnet test --no-build --verbosity normal --logger 'junit' --results-directory './.test-results/integration' ./tests/Integration/Integration.csproj;
                         '''
 
                         junit "$pathToTestResultsIntegration"
