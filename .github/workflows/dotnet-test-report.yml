@@ -1,7 +1,7 @@
-name: '.NET Test report'
+name: ".NET Test report"
 on:
   workflow_run:
-    workflows: ['.NET']
+    workflows: [".NET"]
     types:
       - completed
 permissions:
@@ -17,6 +17,6 @@ jobs:
           artifact: test-results
           name: JUnit
           path: |
-            .test-results/unit/TestResults.xml
-            .test-results/integration/TestResults.xml
+            unit/TestResults.xml
+            integration/TestResults.xml
           reporter: java-junit
