@@ -1,7 +1,6 @@
 name: Docker image
 on:
   push:
-  pull_request:
 jobs:
   Build:
     runs-on: ubuntu-latest
