@@ -3,7 +3,6 @@ on:
   workflow_run:
     workflows: 
       - ".NET"
-      - "Docker image"
     types: 
       - completed
   
