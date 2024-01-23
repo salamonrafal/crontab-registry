@@ -5,8 +5,9 @@ on:
     types:
       - completed
 jobs:
-  report:
+  Report:
     runs-on: ubuntu-latest
+    environment: testing
     steps:
       - uses: dorny/test-reporter@v1
         with:
