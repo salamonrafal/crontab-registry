@@ -1,16 +1,19 @@
 name: TEST WORKFLOW
 on: 
   workflow_run:
-    workflows: [".NET", "Docker image"]
+    workflows: 
+      - ".NET"
+      - "Docker image"
     types: 
       - completed
-    branches: [main, "*"]
   
 jobs:
   TestWorkflow:
+    name: Test Step
     runs-on: ubuntu-latest
-    environment: testing
     steps:
-        - uses: actions/checkout@v3
-        - name: Build
-          run: echo "test"
+       - uses: actions/checkout@v3
+         with:
+           ref: ${{ github.event.workflow_run.head_branch }}
+       - name: Build
+         run: echo "test"
