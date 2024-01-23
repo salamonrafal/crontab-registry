@@ -1,12 +1,11 @@
 name: TEST WORKFLOW
 on: 
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_run:
-    workflows: [".NET"]
-    types: [completed]
+    workflows: [.NET]
+    types: 
+      - completed
+    branches: ["main"]
+  
 jobs:
   TestWorkflow:
     runs-on: ubuntu-latest
