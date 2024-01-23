@@ -5,6 +5,10 @@ on:
       - ".NET"
     types: 
       - completed
+permissions:
+  contents: read
+  actions: read
+  checks: write
 jobs:
   Report:
     runs-on: ubuntu-latest
