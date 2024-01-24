@@ -1,10 +1,8 @@
 ﻿using CrontabRegistry.Domain.Models;
-using CrontabRegistry.Domain.Options;
 using CrontabRegistry.Domain.Repositories;
 using CrontabRegistry.Infrastructure.Repositories;
-using Microsoft.Extensions.Options;
-using MongoDB.Driver;
 using FluentAssertions;
+using MongoDB.Driver;
 using Moq;
 using Unit.Helpers;
 
@@ -12,12 +10,11 @@ namespace Unit.CrontabRegistry.Infrastructure.Repositories
 {
     public class WeatherForecastRepositoryTest
     {
-        private IWeatherForecastRepository? _sut; 
+        private IWeatherForecastRepository? _sut;
         private Mock<IMongoClient> _mockMongoClient;
         private Mock<IMongoDatabase> _mockMongoDatabase;
         private Mock<IMongoCollection<SummarieModel>> _mockMongoCollection;
         private Mock<IAsyncCursor<SummarieModel>> _summarieCursor;
-        private IOptions<CrontabRegistryDatabaseOptions> _options;
 
         [SetUp]
         public void SetUp()
@@ -26,13 +23,6 @@ namespace Unit.CrontabRegistry.Infrastructure.Repositories
             _mockMongoDatabase = new Mock<IMongoDatabase>(MockBehavior.Strict);
             _mockMongoCollection = new Mock<IMongoCollection<SummarieModel>>(MockBehavior.Strict);
             _summarieCursor = new Mock<IAsyncCursor<SummarieModel>>(MockBehavior.Strict);
-            
-            _options = Options.Create(new CrontabRegistryDatabaseOptions()
-            {
-                ConnectionString = "mongodb://test",
-                DatabaseName = "test",
-                SummariesCollectionName = "test",
-            });
         }
 
         [TearDown]
@@ -48,7 +38,6 @@ namespace Unit.CrontabRegistry.Infrastructure.Repositories
         public async Task GetSummariesLshould_return_list_of_summaries_as_array_of_strings()
         {
             // arrange
-            var databaseOptions = _options.Value;
             var expectedFatabaseResult = new List<SummarieModel>() {
                 new SummarieModel () { Id = "65a2923acea7dd8f30e8cb41", Name = "Freezing"},
                 new SummarieModel () { Id = "65a292b0cea7dd8f30e8cb42", Name = "Bracing"},
@@ -78,13 +67,13 @@ namespace Unit.CrontabRegistry.Infrastructure.Repositories
             (_mockMongoClient, _mockMongoDatabase, _summarieCursor, _mockMongoCollection) = MocksMongoDbHelper
                 .PrepareMongoCollectionForFindAsync<SummarieModel>(
                     "summaries",
-                    databaseOptions,
+                    "crontab-registry",
                     expectedFatabaseResult,
                     null,
                     null
                 );
 
-            _sut = new WeatherForecastRepository(_mockMongoClient.Object, _options);
+            _sut = new WeatherForecastRepository(_mockMongoDatabase.Object);
 
             // act
             var results = await _sut.GetSummaries();

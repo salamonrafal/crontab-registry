@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CrontabRegistry.Domain.Options
+namespace CrontabRegistry.Application.Options
 {
     public class CrontabRegistryDatabaseOptions
     {

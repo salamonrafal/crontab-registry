@@ -1,5 +1,4 @@
-﻿using CrontabRegistry.Domain.Options;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using Moq;
 
 namespace Unit.Helpers
@@ -8,7 +7,7 @@ namespace Unit.Helpers
     {
         public static (Mock<IMongoClient>, Mock<IMongoDatabase>, Mock<IAsyncCursor<TModel>>, Mock<IMongoCollection<TModel>>) PrepareMongoCollectionForFindAsync<TModel>(
             string collectionName,
-            CrontabRegistryDatabaseOptions databaseOptions,
+            string datatbaseName,
             IList<TModel> returnData,
             MongoCollectionSettings? collectionSettings = null,
             MongoDatabaseSettings? databaseSettings = null
@@ -32,7 +31,7 @@ namespace Unit.Helpers
 
             var (mockMongoClient, mockMongoDatabase) = InitializeMongoDb<TModel>(
                 collectionName,
-                databaseOptions,
+                datatbaseName,
                 mockMongoCollection
             );
 
@@ -41,7 +40,7 @@ namespace Unit.Helpers
 
         private static (Mock<IMongoClient>, Mock<IMongoDatabase>) InitializeMongoDb<TModel>(
             string collectionName,
-            CrontabRegistryDatabaseOptions databaseOptions,
+            string datatbaseName,
             Mock<IMongoCollection<TModel>> mockMongoCollection,
             MongoCollectionSettings? collectionSettings = null,
             MongoDatabaseSettings? databaseSettings = null
@@ -52,8 +51,6 @@ namespace Unit.Helpers
 
             mockMongoDatabase.Setup(m => m.GetCollection<TModel>(collectionName, collectionSettings))
                 .Returns(mockMongoCollection.Object);
-            mockMongoClient.Setup(m => m.GetDatabase(databaseOptions.DatabaseName, databaseSettings))
-                .Returns(mockMongoDatabase.Object);
 
             return (mockMongoClient, mockMongoDatabase);
         }
