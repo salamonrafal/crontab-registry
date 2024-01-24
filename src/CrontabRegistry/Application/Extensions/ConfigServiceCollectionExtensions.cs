@@ -1,12 +1,10 @@
-﻿using CrontabRegistry.Application.Services;
-using CrontabRegistry.Domain.Options;
+﻿using CrontabRegistry.Application.Options;
+using CrontabRegistry.Application.Services;
 using CrontabRegistry.Domain.Repositories;
 using CrontabRegistry.Domain.Services;
 using CrontabRegistry.Infrastructure.Repositories;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using MongoDB.Driver.Core.Configuration;
-using System.Data;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -21,21 +19,32 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddRepositories(this IServiceCollection services, IConfiguration configuration)
         {
-            services = AddMongoClient(services, configuration);
-            services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>();
+            services.Configure<CrontabRegistryDatabaseOptions>(
+                configuration.GetSection(nameof(CrontabRegistryDatabaseOptions))
+            );
+
+            services = AddMongoClient(services);
+            services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>(
+                serviceProvider =>
+                {
+                    var mongoClient = serviceProvider.GetRequiredService<IMongoClient>();
+                    var databaseOptions = serviceProvider
+                        .GetRequiredService<IOptions<CrontabRegistryDatabaseOptions>>().Value;
+
+                    return new WeatherForecastRepository(mongoClient.GetDatabase(databaseOptions.DatabaseName));
+                }
+            );
 
             return services;
         }
 
-        private static IServiceCollection AddMongoClient(IServiceCollection services, IConfiguration configuration)
+        private static IServiceCollection AddMongoClient(IServiceCollection services)
         {
-            services.Configure<CrontabRegistryDatabaseOptions>(
-                configuration.GetSection(nameof(CrontabRegistryDatabaseOptions))
-            );
             var mongodbClient = new MongoClient();
 
             services.AddScoped<IMongoClient, MongoClient>(
-                serviceProvider => {
+                serviceProvider =>
+                {
                     var crontabRegistryDatabaseOptions = serviceProvider
                         .GetRequiredService<IOptions<CrontabRegistryDatabaseOptions>>().Value;
                     return new MongoClient(crontabRegistryDatabaseOptions.ConnectionString);

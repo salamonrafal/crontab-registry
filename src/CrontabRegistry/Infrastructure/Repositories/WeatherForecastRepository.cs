@@ -1,7 +1,5 @@
 ﻿using CrontabRegistry.Domain.Models;
-using CrontabRegistry.Domain.Options;
 using CrontabRegistry.Domain.Repositories;
-using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,10 +9,8 @@ namespace CrontabRegistry.Infrastructure.Repositories
     public class WeatherForecastRepository : MongoAbstractRepository, IWeatherForecastRepository
     {
         public WeatherForecastRepository(
-            IMongoClient mongoClient,
-            IOptions<CrontabRegistryDatabaseOptions> options
-        ) : base(mongoClient, options)
-        {
+            IMongoDatabase contextDb
+        ) : base(contextDb) {
         }
 
         public async Task<string[]> GetSummaries()
