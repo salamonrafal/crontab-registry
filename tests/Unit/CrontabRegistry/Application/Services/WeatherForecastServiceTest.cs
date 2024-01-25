@@ -49,7 +49,7 @@ namespace Unit.CrontabRegistry.Application.Services
             var results = await _sut.GenerateWeatherForecast();
 
             // assert
-            results.Should().HaveCount(6);
+            results.Should().HaveCount(5);
             results.Should().AllSatisfy(x =>
             {
                 x.Summary.Should().ContainAny(expectedSummaries);
