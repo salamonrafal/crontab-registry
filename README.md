@@ -1,8 +1,9 @@
 # Crontab registry
 
+
 # Index of content
 * [Project directory structure](#project-directory-structure)
-* [Code of conduct](#code-of-conduct)
+* [Code standards](#code-starndards)
 * [Testing](#testing)
 * [Docker](#docker)
   * [Build image](#build-image)
@@ -24,14 +25,15 @@
   * [Secrets in project](#secrets-in-project)
 * [How to setup local environment](#how-to-setup-local-environment)
 
+
 ---
 
 
 # Project directory structure
 
 
-# Code of conduct
-[Read more about code of conduct](doc/CODE-OF-CONDUUCT.md)
+# Code starndards
+This section outlines the code standards followed in the repository, covering topics such as naming rules, naming conventions, and general code conventions. For more in-depth information, please refer to the dedicated document on code standards, accessible [here](doc/CODE-STANDARDS.md).
 
 
 # Testing
