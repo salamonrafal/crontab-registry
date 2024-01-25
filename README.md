@@ -1,6 +1,9 @@
-# crontab-registry
+# Crontab registry
 
 # Index of content
+* [Project directory structure](#project-directory-structure)
+* [Code of conduct](#code-of-conduct)
+* [Testing](#testing)
 * [Docker](#docker)
   * [Build image](#build-image)
     * [Build image for Production](#build-image-for-production)
@@ -19,8 +22,19 @@
     * [Rebuild for development env](#rebuild-for-development-env)
   * [Environments variables](#environments-variables)
   * [Secrets in project](#secrets-in-project)
+* [How to setup local environment](#how-to-setup-local-environment)
 
 ---
+
+
+# Project directory structure
+
+
+# Code of conduct
+[Read more about code of conduct](doc/CODE-OF-CONDUUCT.md)
+
+
+# Testing
 
 
 # Docker 
@@ -146,3 +160,6 @@ You can handle such data in several ways:
 * Through environment variables (used in this project for deploying the application to a server), and you can read more about them [here](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-8.0#non-prefixed-environment-variables)
 * Using user-secrets in dotnet, which is very useful during the development and testing phases. More information can be found [here](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=linux)
 * By utilizing an application like Vault or a similar tool (the best solution where sensitive data is not stored directly without encryption). You can learn more [here](https://developer.hashicorp.com/vault/docs/what-is-vault)
+
+
+# How to setup local environment
