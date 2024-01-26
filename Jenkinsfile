@@ -65,15 +65,20 @@ node {
                 }
 
                 stage('[.NET][Testing] Check code style & format') {
-                    sh '''
-                        export DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME
-                        export HOME=/tmp
+                    try {
+                        sh '''
+                            export DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME
+                            export HOME=/tmp
 
-                        echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"
-                        echo "HOME: \$HOME"
+                            echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"
+                            echo "HOME: \$HOME"
 
-                        dotnet format  --verify-no-changes --report ./.linter-results/dotnet/ -v diag
-                    '''
+                            dotnet format  --verify-no-changes --report ./.linter-results/dotnet/ -v diag
+                        '''
+                    } catch (Exception e) {
+                        println('Caught exception: ' + e)
+                        currentBuild.result = 'FAILED'
+                    }
                 }
 
                 stage('[.NET][Testing] Run test Unit') {
