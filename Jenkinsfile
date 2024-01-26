@@ -64,6 +64,18 @@ node {
                     '''
                 }
 
+                stage('[.NET][Testing] Check code style & format') {
+                    sh '''
+                        export DOTNET_CLI_HOME=/tmp/DOTNET_CLI_HOME
+                        export HOME=/tmp
+
+                        echo "DOTNET_CLI_HOME: \$DOTNET_CLI_HOME"
+                        echo "HOME: \$HOME"
+
+                        dotnet format  --verify-no-changes --report ./.linter-results/dotnet/ -v diag
+                    '''
+                }
+
                 stage('[.NET][Testing] Run test Unit') {
                     try {
                         sh '''
