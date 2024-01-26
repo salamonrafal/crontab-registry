@@ -77,7 +77,9 @@ node {
                         '''
                     } catch (Exception e) {
                         println('Caught exception: ' + e)
-                        currentBuild.result = 'FAILED'
+                        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                            error "dotnet format found errors in code style or code format"
+                        }
                     }
                 }
 
