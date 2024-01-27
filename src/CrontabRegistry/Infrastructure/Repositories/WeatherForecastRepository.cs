@@ -10,7 +10,8 @@ namespace CrontabRegistry.Infrastructure.Repositories
     {
         public WeatherForecastRepository(
             IMongoDatabase contextDb
-        ) : base(contextDb) {
+        ) : base(contextDb)
+        {
         }
 
         public async Task<string[]> GetSummaries()

@@ -1,6 +1,10 @@
-# crontab-registry
+# Crontab registry
+
 
 # Index of content
+* [Project directory structure](#project-directory-structure)
+* [Code standards](#code-starndards)
+* [Testing](#testing)
 * [Docker](#docker)
   * [Build image](#build-image)
     * [Build image for Production](#build-image-for-production)
@@ -19,8 +23,47 @@
     * [Rebuild for development env](#rebuild-for-development-env)
   * [Environments variables](#environments-variables)
   * [Secrets in project](#secrets-in-project)
+* [How to setup local environment](#how-to-setup-local-environment)
+
 
 ---
+
+
+# Project directory structure
+In this section outlines the project's directory structure and its key components:
+
++ __root__ - Root directory
+  + __.github__ - Directory containing configurations and workflows related to GitHub
+    + __workflows__ - Directory containing files related to GitHub Actions
+  + __doc__ - Directory containing additional documentation (.md files) for the project
+  + __docker__ - Directory containing configurations, additional files needed to build the image, and Dockerfile
+    + __scripts__ - Directory containing shell scripts required to build the image or run the container (e.g., entrypoint)
+  + __src__ - Directory containing the source code for the service or application
+  + __tests__ - Directory containing unit and integration tests necessary for verification
+
+
+
+# Code starndards
+This section outlines the code standards followed in the repository, covering topics such as naming rules, naming conventions, and general code conventions. For more in-depth information, please refer to the dedicated document on code standards, accessible [here](doc/CODE-STANDARDS.md).
+
+
+# Testing
+Almost all public methods should be covered by unit tests, and endpoints must be tested by integration tests. All tests related to unit testing should be placed in `./test/Unit`, and those related to integration testing should be placed in `./test/Integration`. Before creating a Docker image ready to deploy on a specific server, the pipeline should run tests before the building process. This prevents deploying an unstable service or application. You can run unit tests locally via an IDE or manually using the command line:
+
+__Run all tests in repository__
+```shell
+dotnet test
+```
+
+__Run only integration tests__
+```shell
+dotnet test ./tests/Integration/Integration.csproj
+```
+
+__Run only unit tests__
+```shell
+dotnet test ./tests/Integration/Unit.csproj
+```
 
 
 # Docker 
@@ -146,3 +189,21 @@ You can handle such data in several ways:
 * Through environment variables (used in this project for deploying the application to a server), and you can read more about them [here](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-8.0#non-prefixed-environment-variables)
 * Using user-secrets in dotnet, which is very useful during the development and testing phases. More information can be found [here](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-8.0&tabs=linux)
 * By utilizing an application like Vault or a similar tool (the best solution where sensitive data is not stored directly without encryption). You can learn more [here](https://developer.hashicorp.com/vault/docs/what-is-vault)
+
+
+# How to setup local environment
+This section should describe how to set up your local computer to run the service or application on it.
+
+If you need to test your service without the integration process, you can simply use your IDE or a shell command like:
+
+```shell
+dotnet run --no-launch-profile --project src/CrontabRegistry/Application/
+```
+
+But before running locally, you have to prepare secrets for access to the database. You can do this in your IDE or use the shell command below:
+
+```shell
+dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "<CONNECTION_STRING_TO_MONGO_DB>" --project src/CrontabRegistry/Application/Application.csproj
+```
+
+Where _**<CONNECTION_STRING_TO_MONGO_DB>**_ is a string containing the address and authentication for the MongoDB server, like: `mongodb://demouser:demopassword@localhost:27017/`

@@ -22,7 +22,10 @@ jobs:
           env:
             MONGODB_CONNECTION_STRING: ${{ secrets.CRONTABREGISTRYDATABASEOPTIONS_CONNECTIONSTRING }}
           run: dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "$MONGODB_CONNECTION_STRING" --project ./src/CrontabRegistry/Application/Application.csproj
+        - name: Check code style & format
+          run: dotnet format  --verify-no-changes --report ./.linter-results/dotnet/ -v diag
         - name: Run unit tests
+          if: success() || failure()
           run: dotnet test --no-build --verbosity normal --logger 'junit' --results-directory './.test-results/unit' ./tests/Unit/Unit.csproj;
         - name: Run integration tests
           if: success() || failure()
