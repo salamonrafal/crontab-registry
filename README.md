@@ -30,6 +30,17 @@
 
 
 # Project directory structure
+In this section outlines the project's directory structure and its key components:
+
++ __root__ - Root directory
+  + __.github__ - Directory containing configurations and workflows related to GitHub
+    + __workflows__ - Directory containing files related to GitHub Actions
+  + __doc__ - Directory containing additional documentation (.md files) for the project
+  + __docker__ - Directory containing configurations, additional files needed to build the image, and Dockerfile
+    + __scripts__ - Directory containing shell scripts required to build the image or run the container (e.g., entrypoint)
+  + __src__ - Directory containing the source code for the service or application
+  + __tests__ - Directory containing unit and integration tests necessary for verification
+
 
 
 # Code starndards
@@ -37,6 +48,22 @@ This section outlines the code standards followed in the repository, covering to
 
 
 # Testing
+Almost all public methods should be covered by unit tests, and endpoints must be tested by integration tests. All tests related to unit testing should be placed in `./test/Unit`, and those related to integration testing should be placed in `./test/Integration`. Before creating a Docker image ready to deploy on a specific server, the pipeline should run tests before the building process. This prevents deploying an unstable service or application. You can run unit tests locally via an IDE or manually using the command line:
+
+__Run all tests in repository__
+```shell
+dotnet test
+```
+
+__Run only integration tests__
+```shell
+dotnet test ./tests/Integration/Integration.csproj
+```
+
+__Run only unit tests__
+```shell
+dotnet test ./tests/Integration/Unit.csproj
+```
 
 
 # Docker 
@@ -165,3 +192,18 @@ You can handle such data in several ways:
 
 
 # How to setup local environment
+This section should describe how to set up your local computer to run the service or application on it.
+
+If you need to test your service without the integration process, you can simply use your IDE or a shell command like:
+
+```shell
+dotnet run --no-launch-profile --project src/CrontabRegistry/Application/
+```
+
+But before running locally, you have to prepare secrets for access to the database. You can do this in your IDE or use the shell command below:
+
+```shell
+dotnet user-secrets set "CrontabRegistryDatabaseOptions:ConnectionString" "<CONNECTION_STRING_TO_MONGO_DB>" --project src/CrontabRegistry/Application/Application.csproj
+```
+
+Where _**<CONNECTION_STRING_TO_MONGO_DB>**_ is a string containing the address and authentication for the MongoDB server, like: `mongodb://demouser:demopassword@localhost:27017/`
